@@ -1,0 +1,21 @@
+name: Sync Fork
+# 触发条件
+on:
+  # 定时：每6小时自动跑一次（UTC时间）
+  schedule:
+    - cron: '0 */6 * * *'
+  # 网页手动点击按钮立即执行
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 关键：给action写入仓库代码权限
+    steps:
+      - name: 安装GitHub CLI
+        uses: cli/cli-setup@v3
+      - name: 同步fork上游仓库
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh repo sync --force
