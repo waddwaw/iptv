@@ -10,8 +10,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      # 不需要安装gh！runner自带gh cli
-      - name: 同步fork上游仓库
+      # 关键：检出当前fork仓库代码，初始化git目录
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync fork from upstream
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh repo sync --force
